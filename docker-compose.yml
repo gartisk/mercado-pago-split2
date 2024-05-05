@@ -1,24 +1,14 @@
-version: '3.8'
-
+version: '3'
 services:
-  node:
-    container_name: node_app
-    build:
-      context: .
-      dockerfile: Dockerfile
+  nodejs:
+    image: node:latest
+    environment:
+      NODE_ENV: development
     ports:
       - "3000:3000"
     volumes:
       - .:/app
-    environment:
-      NODE_ENV: development
-    depends_on:
-      - db
-
-  db:
-    container_name: sqlite_db
-    image: alpine:latest
-    volumes:
-      - ./data:/data
-    command: >
-      sh -c "apk add sqlite && sqlite3 /data/database.sqlite"
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    command: sh -c "apt-get update && apt-get install -y sqlite3 && tail -f /dev/null"
